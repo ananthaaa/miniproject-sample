@@ -21,13 +21,13 @@ export default function AdminDashboard() {
   const [clickMode, setClickMode] = useState(false);
 
   const handleMapClick = useCallback((lat: number, lng: number) => {
-    if (!clickMode) return;
-    setPendingMapCoords({ lat, lng });
-    setEditingMarker(null);
-    setPanelView('form');
-    setPanelOpen(true);
-    setClickMode(false);
-  }, [clickMode]);
+    if (clickMode || panelView === 'form') {
+      setPendingMapCoords({ lat, lng });
+      setPanelView('form');
+      setPanelOpen(true);
+      setClickMode(false);
+    }
+  }, [clickMode, panelView]);
 
   const handleAddNew = () => {
     setEditingMarker(null);

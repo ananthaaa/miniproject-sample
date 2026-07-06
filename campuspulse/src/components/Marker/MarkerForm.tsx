@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import type { Destination, MarkerCategory } from '../../types';
 import { CATEGORY_COLORS, CATEGORY_ICONS } from '../../types';
@@ -31,6 +31,17 @@ export function MarkerForm({ initial, onSave, onCancel, onMapCoords }: MarkerFor
     category: initial?.category ?? 'Academic',
   });
   const [errors, setErrors] = useState<Partial<MarkerFormData>>({});
+
+  useEffect(() => {
+    if (onMapCoords) {
+      setForm((f) => ({
+        ...f,
+        lat: onMapCoords.lat.toString(),
+        lng: onMapCoords.lng.toString(),
+      }));
+      setErrors((e) => ({ ...e, lat: '', lng: '' }));
+    }
+  }, [onMapCoords]);
 
   const set = (key: keyof MarkerFormData, value: string) => {
     setForm((f) => ({ ...f, [key]: value }));
