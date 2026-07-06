@@ -1,0 +1,312 @@
+/* ============================================================
+   CampusPulse Navigator — Global Styles
+   ============================================================ */
+
+/* ── Custom fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+/* ── CSS Design Tokens ── */
+:root {
+  --campus-blue: #0066ff;
+  --campus-blue-dark: #0052cc;
+  --campus-navy: #0a1628;
+  --campus-gold: #f59e0b;
+  --campus-green: #10b981;
+  --campus-red: #ef4444;
+
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --text-primary: #0a1628;
+  --text-secondary: #64748b;
+  --border-color: rgba(148, 163, 184, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.08);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.dark {
+  --bg-primary: #060d1a;
+  --bg-secondary: #0d1b2e;
+  --bg-card: rgba(13, 27, 46, 0.9);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: rgba(71, 85, 105, 0.4);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,0.5);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(100,116,139,0.7); }
+
+/* ── Glassmorphism utility ── */
+.glass {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+}
+
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+.dark .glass-subtle {
+  background: rgba(13, 27, 46, 0.7);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+/* ── GPS Pulse animation ── */
+@keyframes gps-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+@keyframes gps-dot-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.6); }
+  50% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(0, 102, 255, 0); }
+}
+
+.gps-marker-dot {
+  width: 16px;
+  height: 16px;
+  background: var(--campus-blue);
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 102, 255, 0.6);
+  animation: gps-dot-pulse 2s infinite;
+  position: relative;
+}
+
+.gps-marker-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px; height: 40px;
+  background: rgba(0, 102, 255, 0.2);
+  border-radius: 50%;
+  animation: gps-pulse 2s infinite;
+}
+
+/* ── Leaflet overrides ── */
+.leaflet-container {
+  font-family: 'Inter', sans-serif !important;
+  z-index: 0;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-xl) !important;
+  border: none !important;
+  padding: 0 !important;
+  overflow: hidden;
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  width: auto !important;
+}
+
+.leaflet-popup-tip-container {
+  margin-top: -1px;
+}
+
+.leaflet-popup-tip {
+  background: var(--bg-secondary) !important;
+}
+
+.leaflet-popup-close-button {
+  top: 12px !important;
+  right: 12px !important;
+  color: var(--text-secondary) !important;
+  font-size: 18px !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.leaflet-routing-container {
+  display: none !important;
+}
+
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.leaflet-control-zoom a {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: none !important;
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  font-size: 16px !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  transition: background 0.2s;
+}
+
+.leaflet-control-zoom a:last-child {
+  border-bottom: none !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--bg-primary) !important;
+}
+
+/* ── Category marker colors ── */
+.marker-academic { filter: hue-rotate(0deg); }
+.marker-administration { filter: hue-rotate(270deg); }
+.marker-auditorium { filter: hue-rotate(180deg); }
+.marker-cafeteria { filter: hue-rotate(30deg); }
+.marker-parking { filter: hue-rotate(120deg); }
+.marker-sports { filter: hue-rotate(60deg); }
+.marker-hostel { filter: hue-rotate(300deg); }
+
+/* ── Map full height ── */
+.map-full {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+}
+
+/* ── Button styles ── */
+.btn-primary {
+  background: linear-gradient(135deg, var(--campus-blue) 0%, var(--campus-blue-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,102,255,0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0,102,255,0.4);
+}
+
+.btn-primary:active { transform: translateY(0); }
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-danger:hover { transform: translateY(-1px); opacity: 0.9; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-ghost:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* ── Input styles ── */
+.input-field {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: var(--campus-blue);
+  box-shadow: 0 0 0 3px rgba(0,102,255,0.1);
+}
+
+.input-field::placeholder { color: var(--text-secondary); }
+
+/* ── Category badge ── */
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Arrival modal overlay ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* ── Sidebar transition ── */
+.sidebar-enter { transform: translateX(-100%); opacity: 0; }
+.sidebar-enter-active { transform: translateX(0); opacity: 1; transition: all 0.3s ease; }
+.sidebar-exit { transform: translateX(0); opacity: 1; }
+.sidebar-exit-active { transform: translateX(-100%); opacity: 0; transition: all 0.3s ease; }
+
+/* ── Route line style ── */
+.leaflet-routing-alt { display: none !important; }
