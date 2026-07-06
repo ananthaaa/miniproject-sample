@@ -54,17 +54,26 @@ export function MarkerProvider({ children }: { children: ReactNode }) {
   const addMarker = async (marker: Omit<Destination, 'id'>) => {
     // Optimistic UI update can go here if needed, but we rely on realtime subscription
     const { error } = await supabase.from('markers').insert([marker]);
-    if (error) console.error('Error adding marker:', error);
+    if (error) {
+      console.error('Error adding marker:', error);
+      throw error;
+    }
   };
 
   const updateMarker = async (id: string, updates: Partial<Omit<Destination, 'id'>>) => {
     const { error } = await supabase.from('markers').update(updates).eq('id', id);
-    if (error) console.error('Error updating marker:', error);
+    if (error) {
+      console.error('Error updating marker:', error);
+      throw error;
+    }
   };
 
   const deleteMarker = async (id: string) => {
     const { error } = await supabase.from('markers').delete().eq('id', id);
-    if (error) console.error('Error deleting marker:', error);
+    if (error) {
+      console.error('Error deleting marker:', error);
+      throw error;
+    }
   };
 
   const getMarker = (id: string) => markers.find((m) => m.id === id);

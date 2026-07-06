@@ -42,15 +42,19 @@ export default function AdminDashboard() {
     setPanelOpen(true);
   };
 
-  const handleSave = (data: Omit<Destination, 'id'>) => {
-    if (editingMarker) {
-      updateMarker(editingMarker.id, data);
-    } else {
-      addMarker(data);
+  const handleSave = async (data: Omit<Destination, 'id'>) => {
+    try {
+      if (editingMarker) {
+        await updateMarker(editingMarker.id, data);
+      } else {
+        await addMarker(data);
+      }
+      setEditingMarker(null);
+      setPendingMapCoords(null);
+      setPanelView('list');
+    } catch (err: any) {
+      alert(`Failed to save marker: ${err.message || 'Unknown error'}. Please check your Supabase Row Level Security (RLS) policies.`);
     }
-    setEditingMarker(null);
-    setPendingMapCoords(null);
-    setPanelView('list');
   };
 
   const handleCancel = () => {
@@ -58,6 +62,14 @@ export default function AdminDashboard() {
     setPendingMapCoords(null);
     setPanelView('list');
     setClickMode(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteMarker(id);
+    } catch (err: any) {
+      alert(`Failed to delete marker: ${err.message || 'Unknown error'}. Please check your Supabase Row Level Security (RLS) policies.`);
+    }
   };
 
   const PANEL_WIDTH = 360;
@@ -81,7 +93,7 @@ export default function AdminDashboard() {
                 destination={dest}
                 isAdminMode
                 onEdit={handleEdit}
-                onDelete={deleteMarker}
+                onDelete={handleDelete}
               />
             ))}
             <LocateMeControl position="bottomright" />
@@ -282,7 +294,7 @@ export default function AdminDashboard() {
                     <MarkerList
                       markers={markers}
                       onEdit={handleEdit}
-                      onDelete={deleteMarker}
+                      onDelete={handleDelete}
                     />
                   </motion.div>
                 ) : (
